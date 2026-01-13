@@ -1,0 +1,31 @@
+# ======================
+# Python
+# ======================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+venv/
+.venv/
+
+# ======================
+# OS / Editor
+# ======================
+.DS_Store
+Thumbs.db
+.vscode/
+
+# ======================
+# Data / Indexes (CRITICAL)
+# ======================
+uploads/
+data/
+*.faiss
+*.index
+
+# ======================
+# Logs
+# ======================
+*.log

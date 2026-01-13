@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Textbook Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>AI Textbook Assistant</h1>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('upload')">Upload PDF</button>
+        <button class="tab" onclick="showTab('chat')">Chat</button>
+        <button class="tab" onclick="showTab('lesson')">Lesson Plan</button>
+    </div>
+
+    <!-- ================= UPLOAD TAB ================= -->
+    <div class="tab-content" id="upload">
+        <h2>Upload Book PDF</h2>
+
+        <form id="uploadForm">
+            <label>Book Name</label>
+            <input type="text" name="book_name" required>
+
+            <label>Select PDF</label>
+            <input type="file" name="pdf" accept="application/pdf" required>
+
+            <button type="submit">Upload</button>
+        </form>
+
+        <p id="status" class="status"></p>
+    </div>
+
+    <!-- ================= CHAT TAB ================= -->
+    <div class="tab-content hidden" id="chat">
+        <h2>Chat with Book</h2>
+
+        <label>Select Book</label>
+        <select id="bookSelect"></select>
+
+        <label>Your Question</label>
+        <input type="text" id="questionInput" placeholder="Ask a question..." />
+
+        <button onclick="sendQuestion()">Ask</button>
+
+        <div id="answerBox"></div>
+    </div>
+
+    <!-- ================= LESSON PLAN TAB ================= -->
+    <div class="tab-content hidden" id="lesson">
+        <h2>Generate Lesson Plan</h2>
+
+        <label>Select Book</label>
+        <select id="lessonBookSelect"></select>
+
+        <label>Chapter Number</label>
+        <input
+            type="number"
+            id="lessonChapterInput"
+            placeholder="e.g. 3"
+            min="1"
+        />
+
+        <label>Topic</label>
+        <input
+            type="text"
+            id="lessonTopicInput"
+            placeholder="e.g. Photosynthesis"
+        />
+
+        <button onclick="generateLessonPlan()">Generate Lesson Plan</button>
+
+        <div id="lessonResult"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
