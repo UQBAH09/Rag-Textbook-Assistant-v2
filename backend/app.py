@@ -11,6 +11,7 @@ from core.run_book_engine import run_engine
 from core.build_book_index import ingest_pdf
 from core.index.indexer import build_and_persist_index
 from core.utils.path import book_index_dir
+from core.build_book_index import index_book
 
 app = Flask(__name__)
 CORS(app)
@@ -25,36 +26,6 @@ DATA_FOLDER = PROJECT_ROOT / "data"
 
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 DATA_FOLDER.mkdir(exist_ok=True)
-
-# =========================
-# INDEXING ENTRY FUNCTION
-# =========================
-def index_book(book_id: str, pdf_path: str):
-    """
-    SINGLE indexing entry point.
-
-    Flow:
-    PDF → documents → vectors → persisted index
-    """
-
-    try:
-        # 1️⃣ Ingest PDF → documents
-        documents = ingest_pdf(pdf_path)
-
-        # 2️⃣ Resolve index path via path.py
-        persist_dir = book_index_dir(book_id)
-        persist_dir.mkdir(parents=True, exist_ok=True)
-
-        # 3️⃣ Build & persist index
-        build_and_persist_index(
-            documents=documents,
-            persist_dir=str(persist_dir)
-        )
-
-        print(f"[INDEX] Completed indexing for book: {book_id}")
-
-    except Exception as e:
-        print(f"[INDEX][ERROR] {book_id}: {e}")
 
 # =========================
 # UPLOAD BOOK
@@ -78,7 +49,6 @@ def upload_pdf():
     save_path = UPLOAD_FOLDER / f"{safe_id}.pdf"
     pdf.save(str(save_path))
 
-    # 🔥 Start indexing in background (NON-BLOCKING)
     threading.Thread(
         target=index_book,
         args=(safe_id, str(save_path)),
@@ -120,7 +90,7 @@ def chat():
 
         answer = run_engine(
             engine_id="chat",
-            index_path=str(index_path),  # ✅ PATH, not ID
+            index_path=str(index_path),
             question=question
         )
 
